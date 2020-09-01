@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Store from '../data/Store';
+
+let model = new Store();
 
 export default function Home({ navigation }) {
   const [proteinValue, onChangeProtein] = useState('');
@@ -11,6 +14,9 @@ export default function Home({ navigation }) {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={[styles.inputLabel, { fontSize: 30, marginTop: 25 }]}>Macro Recipes</Text>
+        <TouchableOpacity onPress={() => model = new Store()} style={{ height: 50, width: 100 }}>
+          <Text>Reset the model</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.inputContainer}>
@@ -48,6 +54,8 @@ export default function Home({ navigation }) {
           style={styles.searchButton}
           onPress={() => {
             console.log(`Protein: ${proteinValue}, Fat: ${fatValue}, Carbs: ${carbValue}`);
+            model.fetchRecipe({ protein: proteinValue, fat: fatValue, carbs: carbValue });
+            navigation.navigate('Results');
           }}
         >
           <Text>Search</Text>
