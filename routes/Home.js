@@ -3,20 +3,17 @@ import { StyleSheet, View, Text, TextInput } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Store from '../data/Store';
 
-let model = new Store();
+const model = Store.getInstance();
 
 export default function Home({ navigation }) {
-  const [proteinValue, onChangeProtein] = useState('');
-  const [fatValue, onChangeFat] = useState('');
-  const [carbValue, onChangeCarb] = useState('');
+  const [protein, onChangeProtein] = useState('');
+  const [fat, onChangeFat] = useState('');
+  const [carbs, onChangeCarbs] = useState('');
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={[styles.inputLabel, { fontSize: 30, marginTop: 25 }]}>Macro Recipes</Text>
-        <TouchableOpacity onPress={() => model = new Store()} style={{ height: 50, width: 100 }}>
-          <Text>Reset the model</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.inputContainer}>
@@ -26,7 +23,7 @@ export default function Home({ navigation }) {
           <TextInput
             style={styles.textInput}
             onChangeText={text => onChangeProtein(text)}
-            value={proteinValue}
+            value={protein}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -36,7 +33,7 @@ export default function Home({ navigation }) {
           <TextInput
             style={styles.textInput}
             onChangeText={text => onChangeFat(text)}
-            value={fatValue}
+            value={fat}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -45,17 +42,19 @@ export default function Home({ navigation }) {
           </Text>
           <TextInput
             style={styles.textInput}
-            onChangeText={text => onChangeCarb(text)}
-            value={carbValue}
+            onChangeText={text => onChangeCarbs(text)}
+            value={carbs}
           />
         </View>
 
         <TouchableOpacity
           style={styles.searchButton}
           onPress={() => {
-            console.log(`Protein: ${proteinValue}, Fat: ${fatValue}, Carbs: ${carbValue}`);
-            model.fetchRecipe({ protein: proteinValue, fat: fatValue, carbs: carbValue });
-            navigation.navigate('Results');
+            console.log(`Protein: ${protein}, Fat: ${fat}, Carbs: ${carbs}`);
+            model.fetchRecipe({ protein, fat, carbs });
+            navigation.navigate('Results', {
+              searchParams: { protein, fat, carbs }
+            });
           }}
         >
           <Text>Search</Text>
