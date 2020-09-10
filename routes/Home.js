@@ -51,7 +51,7 @@ export default function Home({ navigation }) {
           style={styles.searchButton}
           onPress={() => {
             console.log(`Protein: ${protein}, Fat: ${fat}, Carbs: ${carbs}`);
-            model.fetchRecipe({ protein, fat, carbs });
+            model.fetchRecipes({ protein, fat, carbs });
             navigation.navigate('Results', {
               searchParams: { protein, fat, carbs }
             });

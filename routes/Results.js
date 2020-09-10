@@ -30,9 +30,23 @@ export default function Results({ route, navigation }) {
     }, [])
   );
 
+  const onSelectRecipe = (id) => {
+    model.fetchRecipe(id);
+    navigation.navigate(
+      'Recipe',
+      {
+        id: id,
+        protein: searchParams.protein,
+        fat: searchParams.fat,
+        carbs: searchParams.carbs
+      }
+    );
+  }
+
   const renderSearchResultItem = ({item}) => {
+    console.log(item);
     return (
-      <TouchableOpacity style={styles.listItemContainer}>
+      <TouchableOpacity style={styles.listItemContainer} onPress={() => onSelectRecipe(item.id)}>
         <View style={styles.listItemHeaderContainer}>
           <Text style={styles.recipeTitleText}>{item.title}</Text>
         </View>
