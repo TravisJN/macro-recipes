@@ -1,8 +1,9 @@
 import React, { useReducer, useCallback } from 'react';
-import { StyleSheet, View, Text, ActivityIndicator, Image, Linking } from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import emitter from 'tiny-emitter/instance';
 import RecipeHeader from '../components/RecipeHeader';
+import Ingredients from '../components/Ingredients';
 
 export default function Recipe({ route, navigation }) {
   const { protein, fat, carbs } = route.params;
@@ -42,6 +43,8 @@ export default function Recipe({ route, navigation }) {
             carbs={carbs}
             readyInMinutes={results.readyInMinutes}
           />
+
+          <Ingredients ingredients={results.extendedIngredients} />
         </>
       }
     </View>
@@ -65,5 +68,6 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     width: '100%',
+    alignItems: 'center',
   },
 });
