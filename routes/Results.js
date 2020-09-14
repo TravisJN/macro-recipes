@@ -21,11 +21,11 @@ export default function Results({ route, navigation }) {
   useFocusEffect(
     useCallback(() => {
       // Do something when this view is focused
-      emitter.on('success', onSuccess);
+      emitter.on('onRecipesSuccess', onSuccess);
 
       return () => {
         // Do something when this view is blurred (unsubscribe)
-        emitter.off('success', onSuccess);
+        emitter.off('onRecipesSuccess', onSuccess);
       };
     }, [])
   );
@@ -35,7 +35,7 @@ export default function Results({ route, navigation }) {
     navigation.navigate(
       'Recipe',
       {
-        id: id,
+        id,
         protein: searchParams.protein,
         fat: searchParams.fat,
         carbs: searchParams.carbs

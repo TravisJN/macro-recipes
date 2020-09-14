@@ -34,7 +34,7 @@ export default class Store {
     if (this.mIsMockData) {
       setTimeout(() => {
         this.mResults = require('./mockRecipesList.json');
-        emitter.emit('success', this.mResults);
+        emitter.emit('onRecipesSuccess', this.mResults);
       }, 10);
     } else {
       try {
@@ -48,7 +48,7 @@ export default class Store {
         const response = await fetch(Store.RECIPES_URL + params);
         const result = await response.json();
         this.mResults = result;
-        emitter.emit('success', result);
+        emitter.emit('onRecipesSuccess', result);
       } catch(e) {
         console.log('Error fetching recipes', e);
         emitter.emit('error', {error: e});
@@ -66,7 +66,7 @@ export default class Store {
     if (this.mIsMockData) {
       setTimeout(() => {
         const result = require('./mockRecipe.json');
-        emitter.emit('success', result);
+        emitter.emit('onRecipeSuccess', result);
       }, 10);
     } else {
       try {
@@ -76,11 +76,32 @@ export default class Store {
         console.log('making request:', url + params);
         const response = await fetch(url + params);
         const result = await response.json();
-        emitter.emit('success', result);
+        emitter.emit('onRecipeSuccess', result);
       } catch(e) {
         console.log(`Error fetching recipe id ${id}`, e);
         emitter.emit('error', {error: e});
       }
+    }
+
+    this.mIsFetching = false;
+  }
+
+  fetchRecipeDirections = async (id) => {
+    this.mIsFetching = true;
+
+    const url = `https://api.spoonacular.com/recipes/${id}/analyzedInstructions?`;
+
+    try {
+      const params = new URLSearchParams({
+        apiKey: Store.API_KEY,
+      });
+      console.log('making request: ', url + params);
+      const response = await fetch(url + params);
+      const result = await response.json();
+      emitter.emit('onDirectionsSuccess', result);
+    } catch(e) {
+      console.log(`Error fetching recipe directions for id: ${id} `, e);
+      emitter.emit('error', { error: e });
     }
 
     this.mIsFetching = false;

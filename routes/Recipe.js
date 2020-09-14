@@ -1,12 +1,13 @@
 import React, { useReducer, useCallback } from 'react';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import emitter from 'tiny-emitter/instance';
 import RecipeHeader from '../components/RecipeHeader';
 import Ingredients from '../components/Ingredients';
+import Directions from '../components/Directions';
 
 export default function Recipe({ route, navigation }) {
-  const { protein, fat, carbs } = route.params;
+  const { protein, fat, carbs, id } = route.params;
   const initialState = {
     results: [],
     isLoading: true,
@@ -21,11 +22,11 @@ export default function Recipe({ route, navigation }) {
   useFocusEffect(
     useCallback(() => {
       // Subscribe to this event when this view is focused
-      emitter.on('success', onSuccess);
+      emitter.on('onRecipeSuccess', onSuccess);
 
       return () => {
         // Do something when this view is blurred (unsubscribe)
-        emitter.off('success', onSuccess);
+        emitter.off('onRecipeSuccess', onSuccess);
       };
     }, [])
   );
@@ -44,7 +45,10 @@ export default function Recipe({ route, navigation }) {
             readyInMinutes={results.readyInMinutes}
           />
 
-          <Ingredients ingredients={results.extendedIngredients} />
+          <ScrollView style={styles.list} contentContainerStyle={{alignItems: 'center'}}>
+            <Ingredients ingredients={results.extendedIngredients} />
+            <Directions id={id} />
+          </ScrollView>
         </>
       }
     </View>
@@ -69,5 +73,9 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     alignItems: 'center',
+  },
+  list: {
+    height: '100%',
+    width: '100%',
   },
 });
