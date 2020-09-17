@@ -64,6 +64,19 @@ export default function Results({ route, navigation }) {
     );
   };
 
+  const renderListFooter = () => {
+    return (
+      <View style={styles.footerContainer}>
+        <TouchableOpacity onPress={() => console.log('previous pressed')}>
+          <Text style={styles.footerText}>{'\< Previous'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => console.log('next pressed')}>
+          <Text style={styles.footerText}>{'Next \>'}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -79,6 +92,7 @@ export default function Results({ route, navigation }) {
             data={state.results}
             renderItem={renderSearchResultItem}
             keyExtractor={item => item.id.toString()}
+            ListFooterComponent={renderListFooter}
           />
         }
       </View>
@@ -151,5 +165,20 @@ const styles = StyleSheet.create({
   recipeInfoContainer: {
     flex: 2,
     justifyContent: 'center',
-  }
+  },
+  footerContainer: {
+    borderWidth: 1,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 70,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    marginTop: 10,
+  },
+  footerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });
