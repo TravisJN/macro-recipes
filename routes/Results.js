@@ -30,32 +30,34 @@ export default function Results({ route, navigation }) {
     }, [])
   );
 
-  const onSelectRecipe = (id) => {
+  const onSelectRecipe = ({ id, protein, fat, carbs}) => {
     model.fetchRecipe(id);
     navigation.navigate(
       'Recipe',
       {
         id,
-        protein: searchParams.protein,
-        fat: searchParams.fat,
-        carbs: searchParams.carbs
+        protein,
+        fat,
+        carbs,
       }
     );
   }
 
   const renderSearchResultItem = ({item}) => {
     console.log(item);
+    const { title, image, protein, fat, carbs, calories } = item;
     return (
-      <TouchableOpacity style={styles.listItemContainer} onPress={() => onSelectRecipe(item.id)}>
+      <TouchableOpacity style={styles.listItemContainer} onPress={() => onSelectRecipe(item)}>
         <View style={styles.listItemHeaderContainer}>
-          <Text style={styles.recipeTitleText}>{item.title}</Text>
+          <Text style={styles.recipeTitleText}>{title}</Text>
         </View>
         <View style={styles.listItemInfoContainer}>
-          <Image source={{ uri: item.image }} style={styles.recipeImage} />
+          <Image source={{ uri: image }} style={styles.recipeImage} />
           <View style={styles.recipeInfoContainer}>
-            <Text>{`Protein: ${searchParams.protein}`}</Text>
-            <Text>{`Fat: ${searchParams.fat}`}</Text>
-            <Text>{`Carbs: ${searchParams.carbs}`}</Text>
+            <Text>{`Protein: ${protein}`}</Text>
+            <Text>{`Fat: ${fat}`}</Text>
+            <Text>{`Carbs: ${carbs}`}</Text>
+            <Text>{`Calories: ${calories}`}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -65,7 +67,9 @@ export default function Results({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.searchParamsText}>{`Protein: ${searchParams.protein} Fat: ${searchParams.fat} Carbs: ${searchParams.carbs}`}</Text>
+        {!!searchParams.protein ? <Text style={styles.metadataText}>{`Protein: ${searchParams.protein}`}</Text> : null}
+        {!!searchParams.fat ? <Text style={styles.metadataText}>{`Fat: ${searchParams.fat}`}</Text> : null}
+        {!!searchParams.carbs ? <Text style={styles.metadataText}>{`Carbs: ${searchParams.carbs}`}</Text> : null}
       </View>
       <View style={styles.listContainer}>
         { state.isLoading && <ActivityIndicator size="large" /> }
@@ -102,7 +106,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   headerContainer: {
-    height: '10%',
+    flex: 1,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -112,6 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   listContainer: {
+    flex: 9,
     alignItems: 'center',
     width: '100%',
   },
@@ -141,6 +146,7 @@ const styles = StyleSheet.create({
   },
   recipeTitleText: {
     fontWeight: 'bold',
+    fontSize: 16,
   },
   recipeInfoContainer: {
     flex: 2,

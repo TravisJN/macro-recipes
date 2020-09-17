@@ -38,12 +38,20 @@ export default class Store {
       }, 10);
     } else {
       try {
-        const params = new URLSearchParams({
+        const searchParamObject = {
           apiKey: Store.API_KEY,
-          maxProtein: protein,
-          maxFat: fat,
-          maxCarbs: carbs,
-        });
+          random: true,
+        };
+        if (protein) {
+          searchParamObject.maxProtein = protein;
+        }
+        if (fat) {
+          searchParamObject.maxFat = fat;
+        }
+        if (carbs) {
+          searchParamObject.maxCarbs = carbs;
+        }
+        const params = new URLSearchParams(searchParamObject);
         console.log('making request:', Store.RECIPES_URL + params);
         const response = await fetch(Store.RECIPES_URL + params);
         const result = await response.json();
@@ -91,17 +99,24 @@ export default class Store {
 
     const url = `https://api.spoonacular.com/recipes/${id}/analyzedInstructions?`;
 
-    try {
-      const params = new URLSearchParams({
-        apiKey: Store.API_KEY,
-      });
-      console.log('making request: ', url + params);
-      const response = await fetch(url + params);
-      const result = await response.json();
-      emitter.emit('onDirectionsSuccess', result);
-    } catch(e) {
-      console.log(`Error fetching recipe directions for id: ${id} `, e);
-      emitter.emit('error', { error: e });
+    if (this.mIsMockData) {
+      setTimeout(() => {
+        const result = require('./mockDirections.json');
+        emitter.emit('onDirectionsSuccess', result);
+      }, 10);
+    } else {
+      try {
+        const params = new URLSearchParams({
+          apiKey: Store.API_KEY,
+        });
+        console.log('making request: ', url + params);
+        const response = await fetch(url + params);
+        const result = await response.json();
+        emitter.emit('onDirectionsSuccess', result);
+      } catch(e) {
+        console.log(`Error fetching recipe directions for id: ${id} `, e);
+        emitter.emit('error', { error: e });
+      }
     }
 
     this.mIsFetching = false;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import emitter from 'tiny-emitter/instance';
 import Store from '../data/Store';
@@ -9,6 +9,7 @@ const model = Store.getInstance();
 export default function Directions({id}) {
   const [isExpanded, setExpanded] = useState(false);
   const [directions, setDirections] = useState([]);
+  const hasData = isExpanded && directions && directions.length;
 
   const onExpand = () => {
     setExpanded(!isExpanded);
@@ -31,29 +32,18 @@ export default function Directions({id}) {
         <Text>{isExpanded ? '▲' : '▼'}</Text>
       </TouchableOpacity>
       {isExpanded &&
-        directions.map((step) => {
+        directions?.map((step) => {
+          console.log(step);
           return (
-            <View style={styles.ingredientContainer} key={step.id} >
-              <Text style={styles.ingredientText}>{step.step}</Text>
+            <View style={styles.ingredientContainer} key={step.number} >
+              <Text style={styles.ingredientText}>{step.number}</Text>
+              <Text style={[styles.ingredientText, {marginLeft: 5}]}>{step.step}</Text>
             </View>
           );
         })
       }
     </View>
   )
-}
-
-function reducer(state, action) {
-  switch(action.type) {
-    case 'resultsReceived':
-      return {
-        ...state,
-        results: action.results,
-        isLoading: false,
-      };
-    default:
-      return state;
-  }
 }
 
 const styles = StyleSheet.create({
@@ -74,6 +64,8 @@ const styles = StyleSheet.create({
   ingredientContainer: {
     marginTop: 5,
     marginBottom: 5,
+    marginRight: 10,
+    flexDirection: 'row',
   },
   ingredientText: {
     fontSize: 16,
