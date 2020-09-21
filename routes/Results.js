@@ -64,25 +64,49 @@ export default function Results({ route, navigation }) {
   };
 
   const renderListFooter = () => {
-    const { fat, protein, carbs } = searchParams;
+    const { minFat, fat, minProtein, protein, minCarbs, carbs } = searchParams;
     return (
       <View style={styles.footerContainer}>
-        <TouchableOpacity onPress={() => model.fetchPreviousRecipes({ fat, protein, carbs })}>
+        <TouchableOpacity onPress={() => {
+            model.fetchPreviousRecipes({ minFat, fat, minProtein, protein, minCarbs, carbs });
+            dispatch({type: 'startFetch'});
+          }}
+        >
           <Text style={styles.footerText}>{'\< Previous'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => model.fetchNextRecipes({ fat, protein, carbs })}>
+        <TouchableOpacity onPress={() => {
+            model.fetchNextRecipes({ minFat, fat, minProtein, protein, minCarbs, carbs });
+            dispatch({type: 'startFetch'});
+          }}
+        >
           <Text style={styles.footerText}>{'Next \>'}</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
+  const getNutrientString = (min, max) => {
+    if (min && max) {
+      return `${min}g - ${max}g`;
+    } else if (min) {
+      return `${min}g - Max`;
+    } else if (max) {
+      return `0g - ${max}g`;
+    }
+    return null;
+  }
+
+  const { minProtein, protein, minFat, fat, minCarbs, carbs} = searchParams;
+  const proteinString = getNutrientString(minProtein, protein);
+  const fatString = getNutrientString(minFat, fat);
+  const carbsString = getNutrientString(minCarbs, carbs);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        {!!searchParams.protein ? <Text style={styles.metadataText}>{`Protein: ${searchParams.protein}`}</Text> : null}
-        {!!searchParams.fat ? <Text style={styles.metadataText}>{`Fat: ${searchParams.fat}`}</Text> : null}
-        {!!searchParams.carbs ? <Text style={styles.metadataText}>{`Carbs: ${searchParams.carbs}`}</Text> : null}
+        {!!proteinString ? <Text style={styles.metadataText}>{`Protein: ${proteinString}`}</Text> : null}
+        {!!fatString ? <Text style={styles.metadataText}>{`Fat: ${fatString}`}</Text> : null}
+        {!!carbsString ? <Text style={styles.metadataText}>{`Carbs: ${carbsString}`}</Text> : null}
       </View>
       <View style={styles.listContainer}>
         { state.isLoading && <ActivityIndicator size="large" /> }
@@ -108,6 +132,12 @@ function reducer(state, action) {
         results: action.results,
         isLoading: false,
       };
+    case 'startFetch':
+      return {
+        ...state,
+        results: [],
+        isLoading: true,
+      }
     default:
       return state;
   }

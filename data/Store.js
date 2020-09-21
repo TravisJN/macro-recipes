@@ -41,7 +41,7 @@ export default class Store {
     await this.fetchRecipes(params);
   }
 
-  fetchRecipes = async ({ protein, fat, carbs }) => {
+  fetchRecipes = async ({ minProtein, minFat, minCarbs, protein, fat, carbs }) => {
     this.mIsFetching = true;
     this.mResults = null;
 
@@ -58,11 +58,20 @@ export default class Store {
           number: Store.NUM_RESULTS,
           offset: Store.NUM_RESULTS * this.mOffset,
         };
+        if (minProtein) {
+          searchParamObject.minProtein = minProtein;
+        }
         if (protein) {
           searchParamObject.maxProtein = protein;
         }
+        if (minFat) {
+          searchParamObject.minFat = minFat;
+        }
         if (fat) {
           searchParamObject.maxFat = fat;
+        }
+        if (minCarbs) {
+          searchParamObject.minCarbs = minCarbs;
         }
         if (carbs) {
           searchParamObject.maxCarbs = carbs;

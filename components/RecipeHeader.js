@@ -1,7 +1,15 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 
-export default function RecipeHeader({ image, title, protein, fat, carbs, readyInMinutes }) {
+export default function RecipeHeader(props) {
+  const {
+    image,
+    title,
+    protein,
+    fat,
+    carbs,
+    readyInMinutes
+  } = props;
 
   const getProteinText = (protein) => {
     if (protein) {
@@ -33,9 +41,6 @@ export default function RecipeHeader({ image, title, protein, fat, carbs, readyI
             {getProteinText(protein)}
             {getFatText(fat)}
             {getCarbsText(carbs)}
-            {/* {!!protein ? <Text style={styles.metadataText}>{`Protein: ${protein}`}</Text> : null}
-            {!!fat ? <Text style={styles.metadataText}>{`Fat: ${fat}`}</Text> : null}
-            {!!carbs ? <Text style={styles.metadataText}>{`Carbs: ${carbs}`}</Text> : null} */}
           </View>
           <Text style={styles.metadataText}>{`⏱️: ${readyInMinutes} minutes`}</Text>
         </View>

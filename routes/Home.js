@@ -9,6 +9,9 @@ export default function Home({ navigation }) {
   const [protein, onChangeProtein] = useState('');
   const [fat, onChangeFat] = useState('');
   const [carbs, onChangeCarbs] = useState('');
+  const [minProtein, onChangeMinProtein] = useState('');
+  const [minFat, onChangeMinFat] = useState('');
+  const [minCarbs, onChangeMinCarbs] = useState('');
 
   return (
     <View style={styles.container}>
@@ -22,8 +25,16 @@ export default function Home({ navigation }) {
           </Text>
           <TextInput
             style={styles.textInput}
+            onChangeText={text => onChangeMinProtein(text)}
+            value={minProtein}
+            placeholder="Min"
+          />
+          <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
+          <TextInput
+            style={styles.textInput}
             onChangeText={text => onChangeProtein(text)}
             value={protein}
+            placeholder="Max"
           />
         </View>
         <View style={styles.inputContainer}>
@@ -32,8 +43,16 @@ export default function Home({ navigation }) {
           </Text>
           <TextInput
             style={styles.textInput}
+            onChangeText={text => onChangeMinFat(text)}
+            value={minFat}
+            placeholder="Min"
+          />
+          <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
+          <TextInput
+            style={styles.textInput}
             onChangeText={text => onChangeFat(text)}
             value={fat}
+            placeholder="Max"
           />
         </View>
         <View style={styles.inputContainer}>
@@ -42,18 +61,26 @@ export default function Home({ navigation }) {
           </Text>
           <TextInput
             style={styles.textInput}
+            onChangeText={text => onChangeMinCarbs(text)}
+            value={minCarbs}
+            placeholder="Min"
+          />
+          <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
+          <TextInput
+            style={styles.textInput}
             onChangeText={text => onChangeCarbs(text)}
             value={carbs}
+            placeholder="Max"
           />
         </View>
 
         <TouchableOpacity
           style={styles.searchButton}
           onPress={() => {
-            console.log(`Protein: ${protein}, Fat: ${fat}, Carbs: ${carbs}`);
-            model.fetchRecipes({ protein, fat, carbs });
+            console.log(`Protein: ${minProtein}-${protein}, Fat: ${minFat}-${fat}, Carbs: ${minCarbs}-${carbs}`);
+            model.fetchRecipes({ minProtein, minFat, minCarbs, protein, fat, carbs });
             navigation.navigate('Results', {
-              searchParams: { protein, fat, carbs }
+              searchParams: { minProtein, minFat, minCarbs, protein, fat, carbs }
             });
           }}
         >
@@ -85,19 +112,19 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-around',
     width: '80%',
   },
   textInput: {
     height: 40,
-    width: '80%',
     borderColor: 'gray',
     borderWidth: 1,
-    marginLeft: 10,
+    flex: 1,
   },
   inputLabel: {
     fontFamily: 'Avenir Next',
     fontSize: 20,
+    flex: 1,
   },
   searchButton: {
     borderWidth: 1,
