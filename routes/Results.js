@@ -44,7 +44,6 @@ export default function Results({ route, navigation }) {
   }
 
   const renderSearchResultItem = ({item}) => {
-    console.log(item);
     const { title, image, protein, fat, carbs, calories } = item;
     return (
       <TouchableOpacity style={styles.listItemContainer} onPress={() => onSelectRecipe(item)}>
@@ -65,12 +64,13 @@ export default function Results({ route, navigation }) {
   };
 
   const renderListFooter = () => {
+    const { fat, protein, carbs } = searchParams;
     return (
       <View style={styles.footerContainer}>
-        <TouchableOpacity onPress={() => console.log('previous pressed')}>
+        <TouchableOpacity onPress={() => model.fetchPreviousRecipes({ fat, protein, carbs })}>
           <Text style={styles.footerText}>{'\< Previous'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('next pressed')}>
+        <TouchableOpacity onPress={() => model.fetchNextRecipes({ fat, protein, carbs })}>
           <Text style={styles.footerText}>{'Next \>'}</Text>
         </TouchableOpacity>
       </View>

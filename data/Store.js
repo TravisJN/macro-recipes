@@ -5,6 +5,7 @@ export default class Store {
   static RECIPES_URL = "https://api.spoonacular.com/recipes/findByNutrients?";
   // static RECIPE_URL = `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=true&`;
   static API_KEY = api.key;
+  static NUM_RESULTS = 10;
 
   static storeInstance = null;
 
@@ -18,6 +19,7 @@ export default class Store {
   mResults = null;
   mIsFetching = false;
   mIsMockData = false;  // set to true to use mock data
+  mOffset = 0;
 
   get hasData() {
     return !!this.mResults;
@@ -25,6 +27,18 @@ export default class Store {
 
   get isFetching() {
     return this.mIsFetching;
+  }
+
+  fetchNextRecipes = async (params) => {
+    this.mOffset = this.mOffset + 1;
+    await this.fetchRecipes(params);
+  }
+
+  fetchPreviousRecipes = async (params) => {
+    if (this.mOffset > 0) {
+      this.mOffset = this.mOffset - 1;
+    }
+    await this.fetchRecipes(params);
   }
 
   fetchRecipes = async ({ protein, fat, carbs }) => {
@@ -40,7 +54,9 @@ export default class Store {
       try {
         const searchParamObject = {
           apiKey: Store.API_KEY,
-          random: true,
+          // random: true,
+          number: Store.NUM_RESULTS,
+          offset: Store.NUM_RESULTS * this.mOffset,
         };
         if (protein) {
           searchParamObject.maxProtein = protein;
