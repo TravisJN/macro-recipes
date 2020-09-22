@@ -5,6 +5,7 @@ import emitter from 'tiny-emitter/instance';
 import RecipeHeader from '../components/RecipeHeader';
 import Ingredients from '../components/Ingredients';
 import Directions from '../components/Directions';
+import Source from '../components/Source';
 
 export default function Recipe({ route, navigation }) {
   const { protein, fat, carbs, id } = route.params;
@@ -48,6 +49,7 @@ export default function Recipe({ route, navigation }) {
           <ScrollView style={styles.list} contentContainerStyle={{alignItems: 'center'}}>
             <Ingredients ingredients={results.extendedIngredients} />
             <Directions id={id} />
+            <Source data={results} />
           </ScrollView>
         </>
       }
