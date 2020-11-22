@@ -8,7 +8,7 @@ import Directions from '../components/Directions';
 import Source from '../components/Source';
 
 export default function Recipe({ route, navigation }) {
-  const { protein, fat, carbs, id } = route.params;
+  const { protein, fat, carbs, calories, id } = route.params;
   const initialState = {
     results: [],
     isLoading: true,
@@ -43,6 +43,7 @@ export default function Recipe({ route, navigation }) {
             protein={protein}
             fat={fat}
             carbs={carbs}
+            calories={calories}
             readyInMinutes={results.readyInMinutes}
           />
 

@@ -39,6 +39,7 @@ export default function Results({ route, navigation }) {
         protein,
         fat,
         carbs,
+        calories,
       }
     );
   }
@@ -64,18 +65,18 @@ export default function Results({ route, navigation }) {
   };
 
   const renderListFooter = () => {
-    const { minFat, fat, minProtein, protein, minCarbs, carbs } = searchParams;
+    const { minFat, fat, minProtein, protein, minCarbs, carbs, minCalories, calories } = searchParams;
     return (
       <View style={styles.footerContainer}>
         <TouchableOpacity onPress={() => {
-            model.fetchPreviousRecipes({ minFat, fat, minProtein, protein, minCarbs, carbs });
+            model.fetchPreviousRecipes({ minFat, fat, minProtein, protein, minCarbs, carbs, minCalories, calories });
             dispatch({type: 'startFetch'});
           }}
         >
           <Text style={styles.footerText}>{'\< Previous'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {
-            model.fetchNextRecipes({ minFat, fat, minProtein, protein, minCarbs, carbs });
+            model.fetchNextRecipes({ minFat, fat, minProtein, protein, minCarbs, carbs, minCalories, calories });
             dispatch({type: 'startFetch'});
           }}
         >
@@ -85,21 +86,24 @@ export default function Results({ route, navigation }) {
     );
   }
 
-  const getNutrientString = (min, max) => {
+  const getNutrientString = (min, max, omitG) => {
+    const unitString = omitG ? '' : 'g';
+
     if (min && max) {
-      return `${min}g - ${max}g`;
+      return `${min}${unitString} - ${max}${unitString}`;
     } else if (min) {
-      return `${min}g - Max`;
+      return `${min}${unitString} - Max`;
     } else if (max) {
-      return `0g - ${max}g`;
+      return `0${unitString} - ${max}${unitString}`;
     }
     return null;
   }
 
-  const { minProtein, protein, minFat, fat, minCarbs, carbs} = searchParams;
+  const { minProtein, protein, minFat, fat, minCarbs, carbs, minCalories, calories } = searchParams;
   const proteinString = getNutrientString(minProtein, protein);
   const fatString = getNutrientString(minFat, fat);
   const carbsString = getNutrientString(minCarbs, carbs);
+  const caloriesString = getNutrientString(minCalories, calories, true);
 
   return (
     <View style={styles.container}>
@@ -107,6 +111,7 @@ export default function Results({ route, navigation }) {
         {!!proteinString ? <Text style={styles.metadataText}>{`Protein: ${proteinString}`}</Text> : null}
         {!!fatString ? <Text style={styles.metadataText}>{`Fat: ${fatString}`}</Text> : null}
         {!!carbsString ? <Text style={styles.metadataText}>{`Carbs: ${carbsString}`}</Text> : null}
+        {!!caloriesString ? <Text style={styles.metadataText}>{`Calories: ${caloriesString}`}</Text> : null}
       </View>
       <View style={styles.listContainer}>
         { state.isLoading && <ActivityIndicator size="large" /> }
@@ -150,7 +155,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   headerContainer: {
-    flex: 1,
+    flex: 2,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -210,5 +215,9 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  metadataText: {
+    fontSize: 18,
+    marginTop: 5,
   },
 });

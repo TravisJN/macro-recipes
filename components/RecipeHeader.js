@@ -8,6 +8,7 @@ export default function RecipeHeader(props) {
     protein,
     fat,
     carbs,
+    calories,
     readyInMinutes
   } = props;
 
@@ -30,6 +31,12 @@ export default function RecipeHeader(props) {
       return <Text style={styles.metadataText}>{`Carbs: ${carbs}`}</Text>;
     }
   }
+  const getCaloriesText = (calories) => {
+    if (calories) {
+      console.log('carbs')
+      return <Text style={styles.metadataText}>{`Calories: ${calories}`}</Text>;
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -40,7 +47,10 @@ export default function RecipeHeader(props) {
           <View style={styles.nutrientsContainer}>
             {getProteinText(protein)}
             {getFatText(fat)}
+          </View>
+          <View style={styles.nutrientsContainer}>
             {getCarbsText(carbs)}
+            {getCaloriesText(calories)}
           </View>
           <Text style={styles.metadataText}>{`⏱️: ${readyInMinutes} minutes`}</Text>
         </View>

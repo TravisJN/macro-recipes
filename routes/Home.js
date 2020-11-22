@@ -9,9 +9,11 @@ export default function Home({ navigation }) {
   const [protein, onChangeProtein] = useState('');
   const [fat, onChangeFat] = useState('');
   const [carbs, onChangeCarbs] = useState('');
+  const [calories, onChangeCalories] = useState('');
   const [minProtein, onChangeMinProtein] = useState('');
   const [minFat, onChangeMinFat] = useState('');
   const [minCarbs, onChangeMinCarbs] = useState('');
+  const [minCalories, onChangeMinCalories] = useState('');
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -73,15 +75,33 @@ export default function Home({ navigation }) {
             placeholder="Max"
           />
         </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>
+            Calories:
+          </Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={text => onChangeMinCalories(text)}
+            value={minCalories}
+            placeholder="Min"
+          />
+          <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={text => onChangeCalories(text)}
+            value={calories}
+            placeholder="Max"
+          />
+        </View>
       </View>
 
       <TouchableOpacity
         style={styles.searchButton}
         onPress={() => {
-          console.log(`Protein: ${minProtein}-${protein}, Fat: ${minFat}-${fat}, Carbs: ${minCarbs}-${carbs}`);
-          model.fetchRecipes({ minProtein, minFat, minCarbs, protein, fat, carbs });
+          console.log(`Protein: ${minProtein}-${protein}, Fat: ${minFat}-${fat}, Carbs: ${minCarbs}-${carbs}, Calories: ${minCalories}-${calories}`);
+          model.fetchRecipes({ minProtein, minFat, minCarbs, minCalories, protein, fat, carbs, calories });
           navigation.navigate('Results', {
-            searchParams: { minProtein, minFat, minCarbs, protein, fat, carbs }
+            searchParams: { minProtein, minFat, minCarbs, minCalories, protein, fat, carbs, calories }
           });
         }}
       >

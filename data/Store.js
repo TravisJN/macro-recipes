@@ -1,6 +1,8 @@
 import api from '../private/api';
 import emitter from 'tiny-emitter/instance';
 
+//https://spoonacular.com/food-api/docs
+
 export default class Store {
   static RECIPES_URL = "https://api.spoonacular.com/recipes/findByNutrients?";
   // static RECIPE_URL = `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=true&`;
@@ -41,7 +43,7 @@ export default class Store {
     await this.fetchRecipes(params);
   }
 
-  fetchRecipes = async ({ minProtein, minFat, minCarbs, protein, fat, carbs }) => {
+  fetchRecipes = async ({ minProtein, minFat, minCarbs, minCalories, protein, fat, carbs, calories }) => {
     this.mIsFetching = true;
     this.mResults = null;
 
@@ -75,6 +77,12 @@ export default class Store {
         }
         if (carbs) {
           searchParamObject.maxCarbs = carbs;
+        }
+        if (minCalories) {
+          searchParamObject.minCalories = minCalories;
+        }
+        if (calories) {
+          searchParamObject.maxCalories = calories;
         }
         const params = new URLSearchParams(searchParamObject);
         console.log('making request:', Store.RECIPES_URL + params);
