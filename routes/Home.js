@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Store from '../data/Store';
 
@@ -14,7 +14,7 @@ export default function Home({ navigation }) {
   const [minCarbs, onChangeMinCarbs] = useState('');
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.headerContainer}>
         <Text style={[styles.inputLabel, { fontSize: 30, marginTop: 25 }]}>Macro Recipes</Text>
       </View>
@@ -87,7 +87,7 @@ export default function Home({ navigation }) {
       >
         <Text style={{ fontFamily: 'Avenir Next', fontSize: 18 }}>Search</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
