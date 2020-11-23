@@ -6,46 +6,6 @@ import Store from '../data/Store';
 
 const model = Store.getInstance();
 
-export default function Directions({id}) {
-  const [isExpanded, setExpanded] = useState(false);
-  const [directions, setDirections] = useState([]);
-  const hasData = isExpanded && directions && directions.length;
-
-  const onExpand = () => {
-    setExpanded(!isExpanded);
-    if (!directions?.length) {
-      emitter.on('onDirectionsSuccess', onSuccess);
-      model.fetchRecipeDirections(id);
-    }
-  }
-
-  const onSuccess = (result) => {
-    console.log(result);
-    setDirections(result?.[0]?.steps);
-    emitter.off('onDirectionsSuccess', onSuccess);
-  }
-
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.expandHeader} onPress={onExpand}>
-        <Text>Directions</Text>
-        <Text>{isExpanded ? '▲' : '▼'}</Text>
-      </TouchableOpacity>
-      {isExpanded &&
-        directions?.map((step) => {
-          console.log(step);
-          return (
-            <View style={styles.ingredientContainer} key={step.number} >
-              <Text style={styles.ingredientText}>{step.number}</Text>
-              <Text style={[styles.ingredientText, {marginLeft: 5}]}>{step.step}</Text>
-            </View>
-          );
-        })
-      }
-    </View>
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     width: '90%',
@@ -76,3 +36,41 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
+
+export default function Directions({id}) {
+  const [isExpanded, setExpanded] = useState(false);
+  const [directions, setDirections] = useState([]);
+  const hasData = isExpanded && directions && directions.length;
+
+  const onExpand = () => {
+    setExpanded(!isExpanded);
+    if (!directions?.length) {
+      emitter.on('onDirectionsSuccess', onSuccess);
+      model.fetchRecipeDirections(id);
+    }
+  }
+
+  const onSuccess = (result) => {
+    setDirections(result?.[0]?.steps);
+    emitter.off('onDirectionsSuccess', onSuccess);
+  }
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.expandHeader} onPress={onExpand}>
+        <Text>Directions</Text>
+        <Text>{isExpanded ? '▲' : '▼'}</Text>
+      </TouchableOpacity>
+      {isExpanded &&
+        directions?.map((step) => {
+          return (
+            <View style={styles.ingredientContainer} key={step.number} >
+              <Text style={styles.ingredientText}>{step.number}</Text>
+              <Text style={[styles.ingredientText, {marginLeft: 5}]}>{step.step}</Text>
+            </View>
+          );
+        })
+      }
+    </View>
+  )
+}

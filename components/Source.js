@@ -2,34 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function Source({data}) {
-  const [isExpanded, setExpanded] = useState(false);
-  const keys = Object.keys(data);
-
-  const onExpand = () => {
-    setExpanded(!isExpanded);
-  }
-
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.expandHeader} onPress={onExpand}>
-        <Text>Source</Text>
-        <Text>{isExpanded ? '▲' : '▼'}</Text>
-      </TouchableOpacity>
-      {isExpanded &&
-        keys.map((key) => {
-          const element = data[key];
-          return (
-            <View style={styles.dataItemContainer} key={key} >
-              <Text style={styles.dataItemText}>{`${key}: ${element}`}</Text>
-            </View>
-          );
-        })
-      }
-    </View>
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     width: '90%',
@@ -58,3 +30,31 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
+
+export default function Source({data}) {
+  const [isExpanded, setExpanded] = useState(false);
+  const keys = Object.keys(data);
+
+  const onExpand = () => {
+    setExpanded(!isExpanded);
+  }
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.expandHeader} onPress={onExpand}>
+        <Text>Source</Text>
+        <Text>{isExpanded ? '▲' : '▼'}</Text>
+      </TouchableOpacity>
+      {isExpanded &&
+        keys.map((key) => {
+          const element = data[key];
+          return (
+            <View style={styles.dataItemContainer} key={key} >
+              <Text style={styles.dataItemText}>{`${key}: ${element}`}</Text>
+            </View>
+          );
+        })
+      }
+    </View>
+  )
+}

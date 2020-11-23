@@ -43,7 +43,7 @@ export default class Store {
     await this.fetchRecipes(params);
   }
 
-  fetchRecipes = async ({ minProtein, minFat, minCarbs, minCalories, protein, fat, carbs, calories }) => {
+  fetchRecipes = async (searchParams) => {
     this.mIsFetching = true;
     this.mResults = null;
 
@@ -55,35 +55,11 @@ export default class Store {
     } else {
       try {
         const searchParamObject = {
+          ...searchParams,
           apiKey: Store.API_KEY,
-          // random: true,
           number: Store.NUM_RESULTS,
           offset: Store.NUM_RESULTS * this.mOffset,
         };
-        if (minProtein) {
-          searchParamObject.minProtein = minProtein;
-        }
-        if (protein) {
-          searchParamObject.maxProtein = protein;
-        }
-        if (minFat) {
-          searchParamObject.minFat = minFat;
-        }
-        if (fat) {
-          searchParamObject.maxFat = fat;
-        }
-        if (minCarbs) {
-          searchParamObject.minCarbs = minCarbs;
-        }
-        if (carbs) {
-          searchParamObject.maxCarbs = carbs;
-        }
-        if (minCalories) {
-          searchParamObject.minCalories = minCalories;
-        }
-        if (calories) {
-          searchParamObject.maxCalories = calories;
-        }
         const params = new URLSearchParams(searchParamObject);
         console.log('making request:', Store.RECIPES_URL + params);
         const response = await fetch(Store.RECIPES_URL + params);

@@ -1,65 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 
-export default function RecipeHeader(props) {
-  const {
-    image,
-    title,
-    protein,
-    fat,
-    carbs,
-    calories,
-    readyInMinutes
-  } = props;
-
-  const getProteinText = (protein) => {
-    if (protein) {
-      console.log('protein')
-      return <Text style={styles.metadataText}>{`Protein: ${protein}`}</Text>;
-    }
-  }
-  const getFatText = (fat) => {
-    if (fat) {
-      console.log('fat')
-
-      return <Text style={styles.metadataText}>{`Fat: ${fat}`}</Text>;
-    }
-  }
-  const getCarbsText = (carbs) => {
-    if (carbs) {
-      console.log('carbs')
-      return <Text style={styles.metadataText}>{`Carbs: ${carbs}`}</Text>;
-    }
-  }
-  const getCaloriesText = (calories) => {
-    if (calories) {
-      console.log('carbs')
-      return <Text style={styles.metadataText}>{`Calories: ${calories}`}</Text>;
-    }
-  }
-
-  return (
-    <View style={styles.container}>
-      <Image source={{ uri: image }} style={styles.recipeImage} />
-      <View style={styles.textContainer}>
-        <Text style={styles.titleText}>{title}</Text>
-        <View style={styles.metadataContainer}>
-          <View style={styles.nutrientsContainer}>
-            {getProteinText(protein)}
-            {getFatText(fat)}
-          </View>
-          <View style={styles.nutrientsContainer}>
-            {getCarbsText(carbs)}
-            {getCaloriesText(calories)}
-          </View>
-          <Text style={styles.metadataText}>{`⏱️: ${readyInMinutes} minutes`}</Text>
-        </View>
-      </View>
-    </View>
-  );
-
-}
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -96,3 +37,57 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
+
+export default function RecipeHeader(props) {
+  const {
+    image,
+    title,
+    protein,
+    fat,
+    carbs,
+    calories,
+    readyInMinutes
+  } = props;
+
+  const getProteinText = (protein) => {
+    if (protein) {
+      return <Text style={styles.metadataText}>{`Protein: ${protein}`}</Text>;
+    }
+  }
+  const getFatText = (fat) => {
+    if (fat) {
+      return <Text style={styles.metadataText}>{`Fat: ${fat}`}</Text>;
+    }
+  }
+  const getCarbsText = (carbs) => {
+    if (carbs) {
+      return <Text style={styles.metadataText}>{`Carbs: ${carbs}`}</Text>;
+    }
+  }
+  const getCaloriesText = (calories) => {
+    if (calories) {
+      return <Text style={styles.metadataText}>{`Calories: ${calories}`}</Text>;
+    }
+  }
+
+  return (
+    <View style={styles.container}>
+      <Image source={{ uri: image }} style={styles.recipeImage} />
+      <View style={styles.textContainer}>
+        <Text style={styles.titleText}>{title}</Text>
+        <View style={styles.metadataContainer}>
+          <View style={styles.nutrientsContainer}>
+            {getProteinText(protein)}
+            {getFatText(fat)}
+          </View>
+          <View style={styles.nutrientsContainer}>
+            {getCarbsText(carbs)}
+            {getCaloriesText(calories)}
+          </View>
+          <Text style={styles.metadataText}>{`⏱️: ${readyInMinutes} minutes`}</Text>
+        </View>
+      </View>
+    </View>
+  );
+
+}

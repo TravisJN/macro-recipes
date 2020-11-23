@@ -7,6 +7,18 @@ import Ingredients from '../components/Ingredients';
 import Directions from '../components/Directions';
 import Source from '../components/Source';
 
+const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    width: '100%',
+    alignItems: 'center',
+  },
+  list: {
+    height: '100%',
+    width: '100%',
+  },
+});
+
 export default function Recipe({ route, navigation }) {
   const { protein, fat, carbs, calories, id } = route.params;
   const initialState = {
@@ -70,15 +82,3 @@ function reducer(state, action) {
       return state;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    width: '100%',
-    alignItems: 'center',
-  },
-  list: {
-    height: '100%',
-    width: '100%',
-  },
-});

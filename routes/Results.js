@@ -5,6 +5,88 @@ import emitter from 'tiny-emitter/instance';
 import Store from '../data/Store';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  headerContainer: {
+    flex: 2,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+  },
+  searchParamsContainer: {
+    width: '100%',
+    height: '45%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  searchParamsText: {
+    fontSize: 18
+  },
+  listContainer: {
+    flex: 9,
+    alignItems: 'center',
+    width: '100%',
+  },
+  listItemContainer: {
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 10,
+    flexDirection: 'column',
+    alignItems: 'center',
+    height: 150,
+    width: '100%',
+  },
+  recipeImage: {
+    flex: 1,
+    resizeMode: 'stretch',
+    height: '85%',
+    borderWidth: 1,
+    marginLeft: 5,
+    marginRight: 5,
+  },
+  listItemInfoContainer: {
+    width: '100%',
+    height: '100%',
+    marginLeft: 10,
+    marginRight: 10,
+    flexDirection: 'row',
+  },
+  recipeTitleText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  recipeInfoContainer: {
+    flex: 2,
+    justifyContent: 'center',
+  },
+  footerContainer: {
+    borderWidth: 1,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 70,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    marginTop: 10,
+  },
+  footerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  metadataText: {
+    fontSize: 18,
+    marginTop: 5,
+  },
+});
+
 export default function Results({ route, navigation }) {
   const model = Store.getInstance();
   const { searchParams } = route.params;
@@ -30,7 +112,7 @@ export default function Results({ route, navigation }) {
     }, [])
   );
 
-  const onSelectRecipe = ({ id, protein, fat, carbs}) => {
+  const onSelectRecipe = ({ id, protein, fat, carbs, calories }) => {
     model.fetchRecipe(id);
     navigation.navigate(
       'Recipe',
@@ -108,10 +190,14 @@ export default function Results({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        {!!proteinString ? <Text style={styles.metadataText}>{`Protein: ${proteinString}`}</Text> : null}
-        {!!fatString ? <Text style={styles.metadataText}>{`Fat: ${fatString}`}</Text> : null}
-        {!!carbsString ? <Text style={styles.metadataText}>{`Carbs: ${carbsString}`}</Text> : null}
-        {!!caloriesString ? <Text style={styles.metadataText}>{`Calories: ${caloriesString}`}</Text> : null}
+        <View style={styles.searchParamsContainer}>
+          {!!proteinString ? <Text style={styles.metadataText}>{`Protein: ${proteinString}`}</Text> : null}
+          {!!fatString ? <Text style={styles.metadataText}>{`Fat: ${fatString}`}</Text> : null}
+        </View>
+        <View style={styles.searchParamsContainer}>
+          {!!carbsString ? <Text style={styles.metadataText}>{`Carbs: ${carbsString}`}</Text> : null}
+          {!!caloriesString ? <Text style={styles.metadataText}>{`Calories: ${caloriesString}`}</Text> : null}
+        </View>
       </View>
       <View style={styles.listContainer}>
         { state.isLoading && <ActivityIndicator size="large" /> }
@@ -147,77 +233,3 @@ function reducer(state, action) {
       return state;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-  },
-  headerContainer: {
-    flex: 2,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-  },
-  searchParamsText: {
-    fontSize: 18
-  },
-  listContainer: {
-    flex: 9,
-    alignItems: 'center',
-    width: '100%',
-  },
-  listItemContainer: {
-    borderWidth: 1,
-    borderRadius: 5,
-    marginTop: 10,
-    flexDirection: 'column',
-    alignItems: 'center',
-    height: 150,
-    width: '100%',
-  },
-  recipeImage: {
-    flex: 1,
-    resizeMode: 'stretch',
-    height: '85%',
-    borderWidth: 1,
-    marginLeft: 5,
-    marginRight: 5,
-  },
-  listItemInfoContainer: {
-    width: '100%',
-    height: '100%',
-    marginLeft: 10,
-    marginRight: 10,
-    flexDirection: 'row',
-  },
-  recipeTitleText: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  recipeInfoContainer: {
-    flex: 2,
-    justifyContent: 'center',
-  },
-  footerContainer: {
-    borderWidth: 1,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 70,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    marginTop: 10,
-  },
-  footerText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  metadataText: {
-    fontSize: 18,
-    marginTop: 5,
-  },
-});

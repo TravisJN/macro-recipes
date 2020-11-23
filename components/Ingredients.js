@@ -2,32 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function Ingredients({ingredients}) {
-  const [isExpanded, setExpanded] = useState(true);
-
-  const onExpand = () => {
-    setExpanded(!isExpanded);
-  }
-
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.expandHeader} onPress={onExpand}>
-        <Text>Ingredients</Text>
-        <Text>{isExpanded ? '▲' : '▼'}</Text>
-      </TouchableOpacity>
-      {isExpanded &&
-        ingredients.map((ingredient) => {
-          return (
-            <View style={styles.ingredientContainer} key={ingredient.id} >
-              <Text style={styles.ingredientText}>{ingredient.originalString}</Text>
-            </View>
-          );
-        })
-      }
-    </View>
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     width: '90%',
@@ -56,3 +30,29 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
+
+export default function Ingredients({ingredients}) {
+  const [isExpanded, setExpanded] = useState(true);
+
+  const onExpand = () => {
+    setExpanded(!isExpanded);
+  }
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.expandHeader} onPress={onExpand}>
+        <Text>Ingredients</Text>
+        <Text>{isExpanded ? '▲' : '▼'}</Text>
+      </TouchableOpacity>
+      {isExpanded &&
+        ingredients.map((ingredient) => {
+          return (
+            <View style={styles.ingredientContainer} key={ingredient.id} >
+              <Text style={styles.ingredientText}>{ingredient.originalString}</Text>
+            </View>
+          );
+        })
+      }
+    </View>
+  )
+}
