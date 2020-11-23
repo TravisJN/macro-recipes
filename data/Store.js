@@ -4,8 +4,8 @@ import emitter from 'tiny-emitter/instance';
 //https://spoonacular.com/food-api/docs
 
 export default class Store {
-  static RECIPES_URL = "https://api.spoonacular.com/recipes/findByNutrients?";
-  // static RECIPE_URL = `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=true&`;
+  static RECIPES_URL = 'https://api.spoonacular.com/recipes/findByNutrients?';
+  static RECIPES_WITH_INGREDIENTS_URL = 'https://api.spoonacular.com/recipes/complexSearch?'
   static API_KEY = api.key;
   static NUM_RESULTS = 10;
 
@@ -31,6 +31,21 @@ export default class Store {
     return this.mIsFetching;
   }
 
+  parseRecipesResponse = (response) => {
+    // A little messy, format response object
+    return response.results.map((item) => {
+      const { nutrition } = item;
+      nutrition.nutrients.forEach((nutrient) => {
+        let key = nutrient.title.toLowerCase();
+        if (key === 'carbohydrates') {
+          key = 'carbs';
+        }
+        item[key] = Math.floor(nutrient.amount);
+      });
+      return item;
+    });
+  }
+
   fetchNextRecipes = async (params) => {
     this.mOffset = this.mOffset + 1;
     await this.fetchRecipes(params);
@@ -54,6 +69,7 @@ export default class Store {
       }, 10);
     } else {
       try {
+        const url = Store.RECIPES_WITH_INGREDIENTS_URL;
         const searchParamObject = {
           ...searchParams,
           apiKey: Store.API_KEY,
@@ -61,10 +77,10 @@ export default class Store {
           offset: Store.NUM_RESULTS * this.mOffset,
         };
         const params = new URLSearchParams(searchParamObject);
-        console.log('making request:', Store.RECIPES_URL + params);
-        const response = await fetch(Store.RECIPES_URL + params);
+        console.log('making request:', url + params);
+        const response = await fetch(url + params);
         const result = await response.json();
-        this.mResults = result;
+        this.mResults = this.parseRecipesResponse(result);
         emitter.emit('onRecipesSuccess', result);
       } catch(e) {
         console.log('Error fetching recipes', e);

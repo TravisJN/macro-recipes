@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
   },
   searchParamsContainer: {
     width: '100%',
-    height: '45%',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -96,8 +95,8 @@ export default function Results({ route, navigation }) {
   };
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const onSuccess = (results) => {
-    dispatch({ type: 'resultsReceived', results });
+  const onSuccess = (response) => {
+    dispatch({ type: 'resultsReceived', response });
   };
 
   useFocusEffect(
@@ -128,6 +127,7 @@ export default function Results({ route, navigation }) {
 
   const renderSearchResultItem = ({item}) => {
     const { title, image, protein, fat, carbs, calories } = item;
+    console.log(item);
     return (
       <TouchableOpacity style={styles.listItemContainer} onPress={() => onSelectRecipe(item)}>
         <View style={styles.listItemHeaderContainer}>
@@ -181,7 +181,7 @@ export default function Results({ route, navigation }) {
     return null;
   }
 
-  const { minProtein, protein, minFat, fat, minCarbs, carbs, minCalories, calories } = searchParams;
+  const { minProtein, protein, minFat, fat, minCarbs, carbs, minCalories, calories, query } = searchParams;
   const proteinString = getNutrientString(minProtein, protein);
   const fatString = getNutrientString(minFat, fat);
   const carbsString = getNutrientString(minCarbs, carbs);
@@ -197,6 +197,9 @@ export default function Results({ route, navigation }) {
         <View style={styles.searchParamsContainer}>
           {!!carbsString ? <Text style={styles.metadataText}>{`Carbs: ${carbsString}`}</Text> : null}
           {!!caloriesString ? <Text style={styles.metadataText}>{`Calories: ${caloriesString}`}</Text> : null}
+        </View>
+        <View style={styles.searchParamsContainer}>
+          {!!query && <Text style={styles.metadataText}>{`Ingredients: ${query}`}</Text>}
         </View>
       </View>
       <View style={styles.listContainer}>
@@ -218,9 +221,10 @@ export default function Results({ route, navigation }) {
 function reducer(state, action) {
   switch(action.type) {
     case 'resultsReceived':
+      const searchResults = action?.response?.results;
       return {
         ...state,
-        results: action.results,
+        results: searchResults || [],
         isLoading: false,
       };
     case 'startFetch':

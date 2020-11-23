@@ -18,6 +18,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
+  headerText: {
+    fontFamily: 'Avenir Next',
+    fontSize: 30,
+  },
   bodyContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -27,7 +31,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    width: '80%',
+    width: '85%',
+  },
+  inputFieldsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    flex: 2,
   },
   textInput: {
     height: 40,
@@ -38,9 +48,10 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontFamily: 'Avenir Next',
-    fontSize: 20,
-    flex: 2,
-    textAlign: 'center',
+    fontSize: 18,
+    flex: 1,
+    textAlign: 'right',
+    paddingRight: 15,
   },
   searchButton: {
     borderWidth: 1,
@@ -65,85 +76,107 @@ export default function Home({ navigation }) {
     maxFat,
     maxCarbs,
     maxCalories,
+    query,  // API query key for Ingredients
   } = state;
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.headerContainer}>
-        <Text style={[styles.inputLabel, { fontSize: 30, marginTop: 25 }]}>Macro Recipes</Text>
+        <Text style={styles.headerText}>Macro Recipes</Text>
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>
             Protein (g):
           </Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => dispatch({ type: 'MIN_PROTEIN', payload: text })}
-            value={minProtein}
-            placeholder="Min"
-          />
-          <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => dispatch({ type: 'MAX_PROTEIN', payload: text })}
-            value={maxProtein}
-            placeholder="Max"
-          />
+          <View style={styles.inputFieldsContainer}>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={text => dispatch({ type: 'MIN_PROTEIN', payload: text })}
+              value={minProtein}
+              placeholder="Min"
+            />
+            <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={text => dispatch({ type: 'MAX_PROTEIN', payload: text })}
+              value={maxProtein}
+              placeholder="Max"
+            />
+          </View>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>
             Fat (g):
           </Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => dispatch({ type: 'MIN_FAT', payload: text })}
-            value={minFat}
-            placeholder="Min"
-          />
-          <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => dispatch({ type: 'MAX_FAT', payload: text })}
-            value={maxFat}
-            placeholder="Max"
-          />
+          <View style={styles.inputFieldsContainer}>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={text => dispatch({ type: 'MIN_FAT', payload: text })}
+              value={minFat}
+              placeholder="Min"
+            />
+            <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={text => dispatch({ type: 'MAX_FAT', payload: text })}
+              value={maxFat}
+              placeholder="Max"
+            />
+          </View>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>
             Carbs (g):
           </Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => dispatch({ type: 'MIN_CARBS', payload: text })}
-            value={minCarbs}
-            placeholder="Min"
-          />
-          <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => dispatch({ type: 'MAX_CARBS', payload: text })}
-            value={maxCarbs}
-            placeholder="Max"
-          />
+          <View style={styles.inputFieldsContainer}>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={text => dispatch({ type: 'MIN_CARBS', payload: text })}
+              value={minCarbs}
+              placeholder="Min"
+            />
+            <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={text => dispatch({ type: 'MAX_CARBS', payload: text })}
+              value={maxCarbs}
+              placeholder="Max"
+            />
+          </View>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>
             Calories:
           </Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => dispatch({ type: 'MIN_CALORIES', payload: text })}
-            value={minCalories}
-            placeholder="Min"
-          />
-          <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={text => dispatch({ type: 'MAX_CALORIES', payload: text })}
-            value={maxCalories}
-            placeholder="Max"
-          />
+          <View style={styles.inputFieldsContainer}>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={text => dispatch({ type: 'MIN_CALORIES', payload: text })}
+              value={minCalories}
+              placeholder="Min"
+            />
+            <Text style={{marginLeft: 10, marginRight: 10}}>-</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={text => dispatch({ type: 'MAX_CALORIES', payload: text })}
+              value={maxCalories}
+              placeholder="Max"
+            />
+          </View>
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>
+            Ingredients:
+          </Text>
+          <View style={styles.inputFieldsContainer}>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={text => dispatch({ type: 'INGREDIENTS', payload: text })}
+              value={query}
+              placeholder="Chicken, Pasta..."
+            />
+          </View>
         </View>
       </View>
 
@@ -151,10 +184,8 @@ export default function Home({ navigation }) {
         style={styles.searchButton}
         onPress={() => {
           console.log(`maxProtein: ${minProtein}-${maxProtein}, maxFat: ${minFat}-${maxFat}, maxCarbs: ${minCarbs}-${maxCarbs}, maxCalories: ${minCalories}-${maxCalories}`);
-          model.fetchRecipes({ minProtein, minFat, minCarbs, minCalories, maxProtein, maxFat, maxCarbs, maxCalories });
-          navigation.navigate('Results', {
-            searchParams: { minProtein, minFat, minCarbs, minCalories, maxProtein, maxFat, maxCarbs, maxCalories }
-          });
+          model.fetchRecipes(state);
+          navigation.navigate('Results', { searchParams: state });
         }}
       >
         <Text style={{ fontFamily: 'Avenir Next', fontSize: 18 }}>Search</Text>
@@ -204,6 +235,11 @@ function reducer(state, action) {
       return {
         ...state,
         maxCalories: action.payload,
+      };
+    case 'INGREDIENTS':
+      return {
+        ...state,
+        query: action.payload,
       };
     default:
       return state;
