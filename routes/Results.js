@@ -4,6 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import emitter from 'tiny-emitter/instance';
 import Store from '../data/Store';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import SearchResultItem from '../components/SearchResultItem';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,38 +33,6 @@ const styles = StyleSheet.create({
     flex: 9,
     alignItems: 'center',
     width: '100%',
-  },
-  listItemContainer: {
-    borderWidth: 1,
-    borderRadius: 5,
-    marginTop: 10,
-    flexDirection: 'column',
-    alignItems: 'center',
-    height: 150,
-    width: '100%',
-  },
-  recipeImage: {
-    flex: 1,
-    resizeMode: 'stretch',
-    height: '85%',
-    borderWidth: 1,
-    marginLeft: 5,
-    marginRight: 5,
-  },
-  listItemInfoContainer: {
-    width: '100%',
-    height: '100%',
-    marginLeft: 10,
-    marginRight: 10,
-    flexDirection: 'row',
-  },
-  recipeTitleText: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  recipeInfoContainer: {
-    flex: 2,
-    justifyContent: 'center',
   },
   footerContainer: {
     borderWidth: 1,
@@ -206,9 +175,9 @@ export default function Results({ route, navigation }) {
         { state.isLoading && <ActivityIndicator size="large" /> }
         { !state.isLoading &&
           <FlatList
-            style={{width: '100%'}}
+            style={{ width: '95%' }}
             data={state.results}
-            renderItem={renderSearchResultItem}
+            renderItem={({item}) => <SearchResultItem item={item} onSelectRecipe={onSelectRecipe} />}
             keyExtractor={item => item.id.toString()}
             ListFooterComponent={renderListFooter}
           />

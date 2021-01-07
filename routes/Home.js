@@ -89,8 +89,10 @@ export default function Home({ navigation }) {
       !formattedParams[key] && delete formattedParams[key];
     });
 
-    model.fetchRecipes(formattedParams);
-    navigation.navigate('Results', { searchParams: formattedParams });
+    if (Object.keys(formattedParams).length > 0) {
+      model.fetchRecipes(formattedParams);
+      navigation.navigate('Results', { searchParams: formattedParams });
+    }
   }
 
   return (
