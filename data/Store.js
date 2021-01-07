@@ -75,6 +75,7 @@ export default class Store {
           apiKey: Store.API_KEY,
           number: Store.NUM_RESULTS,
           offset: Store.NUM_RESULTS * this.mOffset,
+          addRecipeNutrition: true,
         };
         const params = new URLSearchParams(searchParamObject);
         console.log('making request:', url + params);

@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 60,
   },
 });
 
@@ -76,8 +77,21 @@ export default function Home({ navigation }) {
     maxFat,
     maxCarbs,
     maxCalories,
-    query,  // API query key for Ingredients
+    query,  // Ingredients (API query key)
   } = state;
+
+  const handleSearch = () => {
+    console.log(`Protein: ${minProtein}-${maxProtein}, Fat: ${minFat}-${maxFat}, Carbs: ${minCarbs}-${maxCarbs}, Calories: ${minCalories}-${maxCalories}`);
+
+    // Remove null params (messes up the API)
+    let formattedParams = { ...state };
+    Object.keys(formattedParams).forEach((key) => {
+      !formattedParams[key] && delete formattedParams[key];
+    });
+
+    model.fetchRecipes(formattedParams);
+    navigation.navigate('Results', { searchParams: formattedParams });
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -182,11 +196,7 @@ export default function Home({ navigation }) {
 
       <TouchableOpacity
         style={styles.searchButton}
-        onPress={() => {
-          console.log(`maxProtein: ${minProtein}-${maxProtein}, maxFat: ${minFat}-${maxFat}, maxCarbs: ${minCarbs}-${maxCarbs}, maxCalories: ${minCalories}-${maxCalories}`);
-          model.fetchRecipes(state);
-          navigation.navigate('Results', { searchParams: state });
-        }}
+        onPress={handleSearch}
       >
         <Text style={{ fontFamily: 'Avenir Next', fontSize: 18 }}>Search</Text>
       </TouchableOpacity>

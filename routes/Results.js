@@ -127,7 +127,7 @@ export default function Results({ route, navigation }) {
 
   const renderSearchResultItem = ({item}) => {
     const { title, image, protein, fat, carbs, calories } = item;
-    console.log(item);
+    console.log(item.title);
     return (
       <TouchableOpacity style={styles.listItemContainer} onPress={() => onSelectRecipe(item)}>
         <View style={styles.listItemHeaderContainer}>
