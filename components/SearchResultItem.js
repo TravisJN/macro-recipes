@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   listItemContainer: {
     borderWidth: 1,
     borderRadius: 5,
+    borderColor: '#21282f',
     marginTop: 10,
     flexDirection: 'column',
     alignItems: 'center',
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
   recipeTitleText: {
     fontWeight: 'bold',
     fontSize: 16,
+    color: '#21282f',
   },
   listItemInfoContainer: {
     width: '100%',
@@ -36,6 +38,7 @@ const styles = StyleSheet.create({
     resizeMode: 'stretch',
     height: '100%',
     borderWidth: 1,
+    borderColor: '#21282f',
     marginLeft: 5,
     marginRight: 5,
   },
@@ -60,7 +63,8 @@ const styles = StyleSheet.create({
   },
   infoValueText: {
     fontWeight: 'bold',
-  }
+    color: '#21282f',
+  },
 });
 
 export default function SearchResultItem({ item, onSelectRecipe }) {

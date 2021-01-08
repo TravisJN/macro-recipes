@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     width: '100%',
+    backgroundColor: '#f9f9f9'
   },
   headerContainer: {
     width: '100%',
@@ -21,6 +22,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: 'Avenir Next',
     fontSize: 30,
+    color: '#21282f',
   },
   bodyContainer: {
     justifyContent: 'center',
@@ -52,6 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'right',
     paddingRight: 15,
+    color: '#21282f'
   },
   searchButton: {
     borderWidth: 1,
@@ -63,6 +66,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 60,
   },
+  searchButtonText: {
+    fontFamily: 'Avenir Next',
+    fontSize: 18,
+    color: '#21282f'
+  }
 });
 
 

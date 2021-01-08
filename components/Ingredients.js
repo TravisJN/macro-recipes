@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderWidth: 1,
     borderRadius: 5,
+    borderColor: '#21282f',
     backgroundColor: 'white',
     shadowOffset: {
       width: 0,
@@ -24,10 +25,17 @@ const styles = StyleSheet.create({
   ingredientText: {
     fontSize: 16,
     fontFamily: 'Avenir Next',
+    color: '#21282f',
+    fontWeight: '500',
   },
   expandHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  headerText: {
+    fontWeight: '600',
+    color: '#21282f',
+    fontSize: 16,
   },
 });
 
@@ -41,14 +49,14 @@ export default function Ingredients({ingredients}) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.expandHeader} onPress={onExpand}>
-        <Text>Ingredients</Text>
-        <Text>{isExpanded ? '▲' : '▼'}</Text>
+        <Text style={styles.headerText}>Ingredients</Text>
+        <Text style={styles.headerText}>{isExpanded ? '▲' : '▼'}</Text>
       </TouchableOpacity>
       {isExpanded &&
         ingredients.map((ingredient) => {
           return (
             <View style={styles.ingredientContainer} key={ingredient.id} >
-              <Text style={styles.ingredientText}>{ingredient.originalString}</Text>
+              <Text style={styles.ingredientText}>• {ingredient.originalString}</Text>
             </View>
           );
         })

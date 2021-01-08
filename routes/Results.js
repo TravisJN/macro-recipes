@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   searchParamsText: {
-    fontSize: 18
+    fontSize: 18,
+    color: '#21282f',
   },
   listContainer: {
     flex: 9,
@@ -46,12 +47,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   footerText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
+    color: '#21282f',
   },
   metadataText: {
-    fontSize: 18,
+    fontSize: 16,
     marginTop: 5,
+    color: '#21282f',
   },
 });
 
@@ -180,6 +183,7 @@ export default function Results({ route, navigation }) {
             renderItem={({item}) => <SearchResultItem item={item} onSelectRecipe={onSelectRecipe} />}
             keyExtractor={item => item.id.toString()}
             ListFooterComponent={renderListFooter}
+            showsVerticalScrollIndicator={false}
           />
         }
       </View>

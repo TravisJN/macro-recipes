@@ -81,6 +81,7 @@ export default class Store {
         console.log('making request:', url + params);
         const response = await fetch(url + params);
         const result = await response.json();
+        console.log(result);
         this.mResults = this.parseRecipesResponse(result);
         emitter.emit('onRecipesSuccess', result);
       } catch(e) {
