@@ -5,9 +5,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: '20%',
-    marginTop: 5,
-    marginLeft: 5,
-    marginRight: 5,
+    width: '100%',
+    padding: 5,
+    borderBottomColor: '#21282f',
+    borderBottomWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: {width: 1, height: 3},
+    shadowOpacity: 0.2,
+    backgroundColor: '#f2f2f2',
   },
   recipeImage: {
     flex: 1,

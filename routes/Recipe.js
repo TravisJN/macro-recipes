@@ -6,6 +6,7 @@ import RecipeHeader from '../components/RecipeHeader';
 import Ingredients from '../components/Ingredients';
 import Directions from '../components/Directions';
 import Source from '../components/Source';
+// import AllData from '../components/AllData';
 
 const styles = StyleSheet.create({
   container: {
@@ -59,10 +60,15 @@ export default function Recipe({ route, navigation }) {
             readyInMinutes={results.readyInMinutes}
           />
 
-          <ScrollView style={styles.list} contentContainerStyle={{alignItems: 'center'}}>
+          <ScrollView
+            style={styles.list}
+            contentContainerStyle={{alignItems: 'center'}}
+            showsVerticalScrollIndicator ={false}
+          >
             <Ingredients ingredients={results.extendedIngredients} />
             <Directions id={id} />
             <Source data={results} />
+            {/* <AllData data={results} /> */}
           </ScrollView>
         </>
       }

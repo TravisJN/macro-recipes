@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: 70,
+    height: 50,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     marginTop: 10,
@@ -96,27 +96,6 @@ export default function Results({ route, navigation }) {
       }
     );
   }
-
-  const renderSearchResultItem = ({item}) => {
-    const { title, image, protein, fat, carbs, calories } = item;
-    console.log(item.title);
-    return (
-      <TouchableOpacity style={styles.listItemContainer} onPress={() => onSelectRecipe(item)}>
-        <View style={styles.listItemHeaderContainer}>
-          <Text style={styles.recipeTitleText}>{title}</Text>
-        </View>
-        <View style={styles.listItemInfoContainer}>
-          <Image source={{ uri: image }} style={styles.recipeImage} />
-          <View style={styles.recipeInfoContainer}>
-            <Text>{`Protein: ${protein}`}</Text>
-            <Text>{`Fat: ${fat}`}</Text>
-            <Text>{`Carbs: ${carbs}`}</Text>
-            <Text>{`Calories: ${calories}`}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
 
   const renderListFooter = () => {
     const { minFat, fat, minProtein, protein, minCarbs, carbs, minCalories, calories } = searchParams;

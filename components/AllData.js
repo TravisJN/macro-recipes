@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import * as WebBrowser from 'expo-web-browser';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,7 +27,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir Next',
     color: '#21282f',
     fontWeight: '500',
-    marginBottom: 10,
   },
   expandHeader: {
     flexDirection: 'row',
@@ -41,29 +39,29 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Source({data}) {
+export default function AllData({data}) {
   const [isExpanded, setExpanded] = useState(false);
+  const keys = Object.keys(data);
 
   const onExpand = () => {
     setExpanded(!isExpanded);
   }
 
-  const handleLink = () => {
-    WebBrowser.openBrowserAsync(data.sourceUrl);
-  }
-
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.expandHeader} onPress={onExpand}>
-        <Text style={styles.headerText}>Source</Text>
+        <Text style={styles.headerText}>Debug Data</Text>
         <Text style={styles.headerText}>{isExpanded ? '▲' : '▼'}</Text>
       </TouchableOpacity>
       {isExpanded &&
-        <View style={styles.dataItemContainer} key={data.id}>
-          <Text style={styles.dataItemText}>{`From: ${data.sourceName || data.creditsText}`}</Text>
-          <Text style={[styles.dataItemText, { color: 'blue' }]} onPress={handleLink}>{data.sourceUrl}</Text>
-          <Text style={styles.dataItemText}>*All app data sourced from Spoonacular API</Text>
-        </View>
+        keys.map((key) => {
+          const element = data[key];
+          return (
+            <View style={styles.dataItemContainer} key={key} >
+              <Text style={styles.dataItemText}>{`${key}: ${element}`}</Text>
+            </View>
+          );
+        })
       }
     </View>
   )
