@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 150,
     width: '100%',
+    backgroundColor: '#ffffff',
   },
   titleTextContainer: {
     width: '100%',

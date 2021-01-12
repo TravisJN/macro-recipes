@@ -1,5 +1,5 @@
 import React, { useReducer, useCallback } from 'react';
-import { StyleSheet, View, Text, ActivityIndicator, FlatList, Image } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import emitter from 'tiny-emitter/instance';
 import Store from '../data/Store';
@@ -13,22 +13,22 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   headerContainer: {
-    flex: 2,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 1,
+    backgroundColor: '#f2f2f2',
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 3 },
+    shadowOpacity: 0.2,
+    padding: 5,
   },
   searchParamsContainer: {
     width: '100%',
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  searchParamsText: {
-    fontSize: 18,
-    color: '#21282f',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
   },
   listContainer: {
     flex: 9,
@@ -53,9 +53,17 @@ const styles = StyleSheet.create({
   },
   metadataText: {
     fontSize: 16,
-    marginTop: 5,
     color: '#21282f',
+    marginLeft: 10,
+    marginTop: 10,
   },
+  errorMessageText: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    color: '#21282f',
+    fontSize: 16,
+    fontWeight: '600',
+  }
 });
 
 export default function Results({ route, navigation }) {
@@ -64,6 +72,7 @@ export default function Results({ route, navigation }) {
   const initialState = {
     results: [],
     isLoading: model.isFetching,
+    isError: false,
   };
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -71,10 +80,15 @@ export default function Results({ route, navigation }) {
     dispatch({ type: 'resultsReceived', response });
   };
 
+  const onError = ({error}) => {
+    dispatch({ type: 'error', error });
+  }
+
   useFocusEffect(
     useCallback(() => {
       // Do something when this view is focused
       emitter.on('onRecipesSuccess', onSuccess);
+      emitter.on('error', onError);
 
       return () => {
         // Do something when this view is blurred (unsubscribe)
@@ -125,37 +139,65 @@ export default function Results({ route, navigation }) {
     if (min && max) {
       return `${min}${unitString} - ${max}${unitString}`;
     } else if (min) {
-      return `${min}${unitString} - Max`;
+      return `${min}${unitString}+`;
     } else if (max) {
       return `0${unitString} - ${max}${unitString}`;
     }
     return null;
   }
 
-  const { minProtein, protein, minFat, fat, minCarbs, carbs, minCalories, calories, query } = searchParams;
-  const proteinString = getNutrientString(minProtein, protein);
-  const fatString = getNutrientString(minFat, fat);
-  const carbsString = getNutrientString(minCarbs, carbs);
+  const { minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, calories, query } = searchParams;
+  const proteinString = getNutrientString(minProtein, maxProtein);
+  const fatString = getNutrientString(minFat, maxFat);
+  const carbsString = getNutrientString(minCarbs, maxCarbs);
   const caloriesString = getNutrientString(minCalories, calories, true);
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <View style={styles.searchParamsContainer}>
-          {!!proteinString ? <Text style={styles.metadataText}>{`Protein: ${proteinString}`}</Text> : null}
-          {!!fatString ? <Text style={styles.metadataText}>{`Fat: ${fatString}`}</Text> : null}
-        </View>
-        <View style={styles.searchParamsContainer}>
-          {!!carbsString ? <Text style={styles.metadataText}>{`Carbs: ${carbsString}`}</Text> : null}
-          {!!caloriesString ? <Text style={styles.metadataText}>{`Calories: ${caloriesString}`}</Text> : null}
-        </View>
-        <View style={styles.searchParamsContainer}>
-          {!!query && <Text style={styles.metadataText}>{`Ingredients: ${query}`}</Text>}
+          {!!proteinString &&
+            <Text style={styles.metadataText}>
+              <Text>Protein: </Text>
+              <Text style={{ fontWeight: '600' }}>{proteinString}</Text>
+            </Text>
+          }
+          {!!fatString &&
+            <Text style={styles.metadataText}>
+              <Text>Fat: </Text>
+              <Text style={{ fontWeight: '600' }}>{fatString}</Text>
+            </Text>
+          }
+          {!!carbsString &&
+            <Text style={styles.metadataText}>
+              <Text>Carbs: </Text>
+              <Text style={{ fontWeight: '600' }}>{carbsString}</Text>
+            </Text>
+          }
+          {!!caloriesString &&
+            <Text style={styles.metadataText}>
+              <Text>Calories: </Text>
+              <Text style={{ fontWeight: '600' }}>{caloriesString}</Text>
+            </Text>
+          }
+          {!!query &&
+            <Text style={styles.metadataText}>
+              <Text>Ingredients: </Text>
+              <Text style={{ fontWeight: '600' }}>{query}</Text>
+            </Text>
+          }
         </View>
       </View>
       <View style={styles.listContainer}>
-        { state.isLoading && <ActivityIndicator size="large" /> }
-        { !state.isLoading &&
+        { state.isLoading &&
+          <ActivityIndicator style={{ marginTop: 'auto', marginBottom: 'auto' }} size="large" />
+        }
+
+        { state.isError &&
+          <Text style={styles.errorMessageText}>Oops! Something went wrong. Please try again.</Text>
+        }
+
+        { (!state.isLoading && !state.isError) &&
           <FlatList
             style={{ width: '95%' }}
             data={state.results}
@@ -178,12 +220,21 @@ function reducer(state, action) {
         ...state,
         results: searchResults || [],
         isLoading: false,
+        isError: false,
       };
     case 'startFetch':
       return {
         ...state,
         results: [],
         isLoading: true,
+        isError: false,
+      }
+    case 'error':
+      return {
+        ...state,
+        results: [],
+        isLoading: false,
+        isError: true,
       }
     default:
       return state;
