@@ -21,8 +21,9 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Avenir Next',
-    fontSize: 30,
+    fontSize: 33,
     color: '#21282f',
+    fontWeight: '500',
   },
   bodyContainer: {
     justifyContent: 'center',
@@ -54,7 +55,8 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'right',
     paddingRight: 15,
-    color: '#21282f'
+    color: '#151a1e',
+    fontWeight: '400',
   },
   searchButton: {
     borderWidth: 1,

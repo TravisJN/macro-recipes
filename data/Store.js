@@ -69,21 +69,31 @@ export default class Store {
       }, 10);
     } else {
       try {
-        const url = Store.RECIPES_WITH_INGREDIENTS_URL;
-        const searchParamObject = {
-          ...searchParams,
-          apiKey: Store.API_KEY,
-          number: Store.NUM_RESULTS,
-          offset: Store.NUM_RESULTS * this.mOffset,
-          addRecipeNutrition: true,
-        };
-        const params = new URLSearchParams(searchParamObject);
-        console.log('making request:', url + params);
-        const response = await fetch(url + params);
-        const result = await response.json();
-        // console.log(result);
-        this.mResults = this.parseRecipesResponse(result);
-        emitter.emit('onRecipesSuccess', result);
+        // Remove null params (messes up the API)
+        let formattedParams = { ...searchParams };
+        Object.keys(formattedParams).forEach((key) => {
+          !formattedParams[key] && delete formattedParams[key];
+        });
+
+        if (Object.keys(formattedParams).length > 0) {
+          const url = Store.RECIPES_WITH_INGREDIENTS_URL;
+          const searchParamObject = {
+            ...formattedParams,
+            apiKey: Store.API_KEY,
+            number: Store.NUM_RESULTS,
+            offset: Store.NUM_RESULTS * this.mOffset,
+            addRecipeNutrition: true,
+          };
+          const params = new URLSearchParams(searchParamObject);
+          console.log('making request:', url + params);
+          const response = await fetch(url + params);
+          const result = await response.json();
+          // console.log(result);
+          this.mResults = this.parseRecipesResponse(result);
+          emitter.emit('onRecipesSuccess', result);
+        } else {
+          throw new Error({ error: 'Invalid search params' });
+        }
       } catch(e) {
         console.log('Error fetching recipes', e);
         emitter.emit('error', {error: e});
