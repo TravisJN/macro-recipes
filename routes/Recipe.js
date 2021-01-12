@@ -1,7 +1,5 @@
-import React, { useReducer, useCallback } from 'react';
-import { StyleSheet, View, ActivityIndicator, ScrollView } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import emitter from 'tiny-emitter/instance';
+import React from 'react';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import RecipeHeader from '../components/RecipeHeader';
 import Ingredients from '../components/Ingredients';
 import Directions from '../components/Directions';
@@ -20,71 +18,31 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Recipe({ route, navigation }) {
-  const { protein, fat, carbs, calories, id } = route.params;
-  const initialState = {
-    results: [],
-    isLoading: true,
-  };
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { results, isLoading } = state;
-
-  const onSuccess = (results) => {
-    dispatch({ type: 'resultsReceived', results });
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      // Subscribe to this event when this view is focused
-      emitter.on('onRecipeSuccess', onSuccess);
-
-      return () => {
-        // Do something when this view is blurred (unsubscribe)
-        emitter.off('onRecipeSuccess', onSuccess);
-      };
-    }, [])
-  );
+export default function Recipe({ route }) {
+  const { protein, fat, carbs, calories, item } = route.params;
 
   return (
     <View style={styles.container}>
-      { isLoading && <ActivityIndicator size="large" /> }
-      { !isLoading &&
-        <>
-          <RecipeHeader
-            image={results.image}
-            title={results.title}
-            protein={protein}
-            fat={fat}
-            carbs={carbs}
-            calories={calories}
-            readyInMinutes={results.readyInMinutes}
-          />
+      <RecipeHeader
+        image={item.image}
+        title={item.title}
+        protein={protein}
+        fat={fat}
+        carbs={carbs}
+        calories={calories}
+        readyInMinutes={item.readyInMinutes}
+      />
 
-          <ScrollView
-            style={styles.list}
-            contentContainerStyle={{alignItems: 'center'}}
-            showsVerticalScrollIndicator ={false}
-          >
-            <Ingredients ingredients={results.extendedIngredients} />
-            <Directions id={id} />
-            <Source data={results} />
-            {/* <AllData data={results} /> */}
-          </ScrollView>
-        </>
-      }
+      <ScrollView
+        style={styles.list}
+        contentContainerStyle={{alignItems: 'center'}}
+        showsVerticalScrollIndicator ={false}
+      >
+        <Ingredients ingredients={item.extendedIngredients} />
+        <Directions directions={item.analyzedInstructions?.[0]?.steps} />
+        <Source data={item} />
+        {/* <AllData data={item} /> */}
+      </ScrollView>
     </View>
   );
-}
-
-function reducer(state, action) {
-  switch(action.type) {
-    case 'resultsReceived':
-      return {
-        ...state,
-        results: action.results,
-        isLoading: false,
-      };
-    default:
-      return state;
-  }
 }

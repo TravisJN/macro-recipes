@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import emitter from 'tiny-emitter/instance';
-import Store from '../data/Store';
-
-const model = Store.getInstance();
 
 const styles = StyleSheet.create({
   container: {
@@ -45,22 +41,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Directions({id}) {
+export default function Directions({directions}) {
   const [isExpanded, setExpanded] = useState(false);
-  const [directions, setDirections] = useState([]);
-  const hasData = isExpanded && directions && directions.length;
 
   const onExpand = () => {
     setExpanded(!isExpanded);
-    if (!directions?.length) {
-      emitter.on('onDirectionsSuccess', onSuccess);
-      model.fetchRecipeDirections(id);
-    }
-  }
-
-  const onSuccess = (result) => {
-    setDirections(result?.[0]?.steps);
-    emitter.off('onDirectionsSuccess', onSuccess);
   }
 
   return (

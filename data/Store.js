@@ -83,6 +83,7 @@ export default class Store {
             number: Store.NUM_RESULTS,
             offset: Store.NUM_RESULTS * this.mOffset,
             addRecipeNutrition: true,
+            fillIngredients: true,
           };
           const params = new URLSearchParams(searchParamObject);
           console.log('making request:', url + params);
@@ -97,62 +98,6 @@ export default class Store {
       } catch(e) {
         console.log('Error fetching recipes', e);
         emitter.emit('error', {error: e});
-      }
-    }
-
-    this.mIsFetching = false;
-  }
-
-  fetchRecipe = async (id) => {
-    this.mIsFetching = true;
-
-    const url = `https://api.spoonacular.com/recipes/${id}/information?includeNutrition=true&`;
-
-    if (this.mIsMockData) {
-      setTimeout(() => {
-        const result = require('./mockRecipe.json');
-        emitter.emit('onRecipeSuccess', result);
-      }, 10);
-    } else {
-      try {
-        const params = new URLSearchParams({
-          apiKey: Store.API_KEY,
-        });
-        console.log('making request:', url + params);
-        const response = await fetch(url + params);
-        const result = await response.json();
-        emitter.emit('onRecipeSuccess', result);
-      } catch(e) {
-        console.log(`Error fetching recipe id ${id}`, e);
-        emitter.emit('error', {error: e});
-      }
-    }
-
-    this.mIsFetching = false;
-  }
-
-  fetchRecipeDirections = async (id) => {
-    this.mIsFetching = true;
-
-    const url = `https://api.spoonacular.com/recipes/${id}/analyzedInstructions?`;
-
-    if (this.mIsMockData) {
-      setTimeout(() => {
-        const result = require('./mockDirections.json');
-        emitter.emit('onDirectionsSuccess', result);
-      }, 10);
-    } else {
-      try {
-        const params = new URLSearchParams({
-          apiKey: Store.API_KEY,
-        });
-        console.log('making request: ', url + params);
-        const response = await fetch(url + params);
-        const result = await response.json();
-        emitter.emit('onDirectionsSuccess', result);
-      } catch(e) {
-        console.log(`Error fetching recipe directions for id: ${id} `, e);
-        emitter.emit('error', { error: e });
       }
     }
 

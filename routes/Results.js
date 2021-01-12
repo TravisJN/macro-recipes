@@ -93,12 +93,14 @@ export default function Results({ route, navigation }) {
       return () => {
         // Do something when this view is blurred (unsubscribe)
         emitter.off('onRecipesSuccess', onSuccess);
+        emitter.off('error', onError);
       };
     }, [])
   );
 
-  const onSelectRecipe = ({ id, protein, fat, carbs, calories }) => {
-    model.fetchRecipe(id);
+  const onSelectRecipe = (item) => {
+    // TODO: just pass item
+    const { id, protein, fat, carbs, calories } = item;
     navigation.navigate(
       'Recipe',
       {
@@ -107,6 +109,7 @@ export default function Results({ route, navigation }) {
         fat,
         carbs,
         calories,
+        item,
       }
     );
   }
