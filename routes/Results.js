@@ -60,6 +60,9 @@ const styles = StyleSheet.create({
   errorMessageText: {
     marginTop: 'auto',
     marginBottom: 'auto',
+    marginLeft: 15,
+    marginRight: 15,
+    textAlign: 'center',
     color: '#21282f',
     fontSize: 16,
     fontWeight: '600',
@@ -73,6 +76,7 @@ export default function Results({ route, navigation }) {
     results: [],
     isLoading: model.isFetching,
     isError: false,
+    isEmpty: false,
   };
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -115,18 +119,18 @@ export default function Results({ route, navigation }) {
   }
 
   const renderListFooter = () => {
-    const { minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, calories } = searchParams;
+    const { minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, maxCalories } = searchParams;
     return (
       <View style={styles.footerContainer}>
         <TouchableOpacity onPress={() => {
-            model.fetchPreviousRecipes({ minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, calories });
+            model.fetchPreviousRecipes({ minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, maxCalories });
             dispatch({ type: 'startFetch' });
           }}
         >
           <Text style={styles.footerText}>{'\< Previous'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {
-            model.fetchNextRecipes({ minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, calories });
+            model.fetchNextRecipes({ minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, maxCalories });
             dispatch({ type: 'startFetch' });
           }}
         >
@@ -149,11 +153,11 @@ export default function Results({ route, navigation }) {
     return null;
   }
 
-  const { minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, calories, query } = searchParams;
+  const { minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, maxCalories, query } = searchParams;
   const proteinString = getNutrientString(minProtein, maxProtein);
   const fatString = getNutrientString(minFat, maxFat);
   const carbsString = getNutrientString(minCarbs, maxCarbs);
-  const caloriesString = getNutrientString(minCalories, calories, true);
+  const caloriesString = getNutrientString(minCalories, maxCalories, true);
 
   return (
     <View style={styles.container}>
@@ -200,7 +204,11 @@ export default function Results({ route, navigation }) {
           <Text style={styles.errorMessageText}>Oops! Something went wrong. Please try again.</Text>
         }
 
-        { (!state.isLoading && !state.isError) &&
+        { state.isEmpty &&
+          <Text style={styles.errorMessageText}>Sorry. We couldn't find any recipes that fit your search criteria. Please try expanding your search.</Text>
+        }
+
+        { (!state.isLoading && !state.isError && !state.isEmpty) &&
           <FlatList
             style={{ width: '95%' }}
             data={state.results}
@@ -224,6 +232,7 @@ function reducer(state, action) {
         results: searchResults || [],
         isLoading: false,
         isError: false,
+        isEmpty: searchResults.length === 0,
       };
     case 'startFetch':
       return {

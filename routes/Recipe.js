@@ -4,6 +4,7 @@ import RecipeHeader from '../components/RecipeHeader';
 import Ingredients from '../components/Ingredients';
 import Directions from '../components/Directions';
 import Source from '../components/Source';
+import Summary from '../components/Summary';
 // import AllData from '../components/AllData';
 
 const styles = StyleSheet.create({
@@ -39,8 +40,9 @@ export default function Recipe({ route }) {
         contentContainerStyle={{alignItems: 'center'}}
         showsVerticalScrollIndicator ={false}
       >
+        <Summary data={item} />
         <Ingredients ingredients={item.extendedIngredients} />
-        <Directions directions={item.analyzedInstructions?.[0]?.steps} />
+        <Directions directions={item.analyzedInstructions?.[0]?.steps} sourceUrl={item.sourceUrl} />
         <Source data={item} />
         {/* <AllData data={item} /> */}
       </ScrollView>

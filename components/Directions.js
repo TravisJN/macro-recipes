@@ -41,8 +41,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Directions({directions}) {
+export default function Directions({ directions }) {
   const [isExpanded, setExpanded] = useState(false);
+  const renderDirections = isExpanded && directions?.length;
+  const renderNoDataMessage = isExpanded && !(directions?.length);
 
   const onExpand = () => {
     setExpanded(!isExpanded);
@@ -54,7 +56,7 @@ export default function Directions({directions}) {
         <Text style={styles.headerText}>Directions</Text>
         <Text style={styles.headerText}>{isExpanded ? '▲' : '▼'}</Text>
       </TouchableOpacity>
-      {isExpanded &&
+      {renderDirections &&
         directions?.map((step) => {
           return (
             <View style={styles.ingredientContainer} key={step.number} >
@@ -63,6 +65,13 @@ export default function Directions({directions}) {
             </View>
           );
         })
+      }
+      {renderNoDataMessage &&
+        <Text style={{ marginTop: 10, marginBottom: 10 }}>
+          Oops! Looks like there are no directions for this recipe.
+          You can try viewing the recipe's web page in the Source section or select a different recipe.
+          Sorry for the inconvenience!
+        </Text>
       }
     </View>
   )

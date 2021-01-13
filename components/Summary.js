@@ -18,15 +18,16 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     padding: 5,
   },
-  ingredientContainer: {
+  dataItemContainer: {
     marginTop: 5,
     marginBottom: 5,
   },
-  ingredientText: {
+  dataItemText: {
     fontSize: 16,
     fontFamily: 'Avenir Next',
     color: '#21282f',
     fontWeight: '500',
+    marginBottom: 10,
   },
   expandHeader: {
     flexDirection: 'row',
@@ -39,8 +40,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Ingredients({ingredients}) {
-  const [isExpanded, setExpanded] = useState(false);
+export default function Summary({ data }) {
+  const [isExpanded, setExpanded] = useState(true);
+  const parsedString = data.summary.replace( /(<([^>]+)>)/ig, '');
 
   const onExpand = () => {
     setExpanded(!isExpanded);
@@ -49,17 +51,13 @@ export default function Ingredients({ingredients}) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.expandHeader} onPress={onExpand}>
-        <Text style={styles.headerText}>Ingredients</Text>
+        <Text style={styles.headerText}>Summary</Text>
         <Text style={styles.headerText}>{isExpanded ? '▲' : '▼'}</Text>
       </TouchableOpacity>
       {isExpanded &&
-        ingredients.map((ingredient) => {
-          return (
-            <View style={styles.ingredientContainer} key={ingredient.id} >
-              <Text style={styles.ingredientText}>• {ingredient.originalString}</Text>
-            </View>
-          );
-        })
+        <View style={styles.dataItemContainer} key={data.id}>
+          <Text style={styles.dataItemText}>{parsedString}</Text>
+        </View>
       }
     </View>
   )
