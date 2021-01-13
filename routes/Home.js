@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     width: '100%',
-    flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   headerText: {
     fontFamily: 'Avenir Next',
@@ -107,9 +107,9 @@ export default function Home({ navigation }) {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.headerContainer}>
+      <TouchableOpacity onPress={() => navigation.navigate('About')} style={styles.headerContainer}>
         <Text style={styles.headerText}>Macro Recipes</Text>
-      </View>
+      </TouchableOpacity>
       <View style={styles.bodyContainer}>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>
