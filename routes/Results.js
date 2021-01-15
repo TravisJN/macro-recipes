@@ -119,18 +119,18 @@ export default function Results({ route, navigation }) {
   }
 
   const renderListFooter = () => {
-    const { minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, maxCalories } = searchParams;
+    const { minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, maxCalories, query } = searchParams;
     return (
       <View style={styles.footerContainer}>
         <TouchableOpacity onPress={() => {
-            model.fetchPreviousRecipes({ minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, maxCalories });
+            model.fetchPreviousRecipes({ minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, maxCalories, query });
             dispatch({ type: 'startFetch' });
           }}
         >
           <Text style={styles.footerText}>{'\< Previous'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {
-            model.fetchNextRecipes({ minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, maxCalories });
+            model.fetchNextRecipes({ minProtein, maxProtein, minFat, maxFat, minCarbs, maxCarbs, minCalories, maxCalories, query });
             dispatch({ type: 'startFetch' });
           }}
         >
